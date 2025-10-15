@@ -13,18 +13,20 @@ class Flappy:
         headless=False: Roda com tela, para visualização.
         """
         pygame.init()
+        # SOLUÇÃO: Inicializa o mixer de som explicitamente para ambientes sem áudio.
+        pygame.mixer.init()
+        
         pygame.display.set_caption("Flappy Bird AI")
         window = Window(288, 512)
 
-        # A SOLUÇÃO: Nós inicializamos o display ANTES de carregar as imagens.
-        # Isso cria o "video mode" que o Pygame precisa.
+        # Inicializamos o display ANTES de carregar as imagens.
         screen = pygame.display.set_mode((window.width, window.height))
 
-        # Agora que o display existe, o carregamento de imagens funcionará.
+        # Agora o carregamento de imagens funcionará.
         images = Images()
 
         if headless:
-            fps = 500  # Aumentamos drasticamente o FPS para o treinamento
+            fps = 500  # Aumentamos o FPS para o treinamento
         else:
             fps = 30 # FPS normal para visualização
 
@@ -51,7 +53,6 @@ class Flappy:
         return None
 
     def game_step(self, action: int):
-        # A lógica de eventos do Pygame só é necessária se houver uma tela visível sendo atualizada
         if not self.headless:
             for event in pygame.event.get():
                 if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):
@@ -75,7 +76,6 @@ class Flappy:
             return reward, game_over, self.score.score
 
         player_crossed_pipe = False
-        # Usamos uma cópia da lista para evitar problemas ao remover itens durante a iteração (embora não aconteça aqui, é uma boa prática)
         for pipe in list(self.pipes.upper):
             if self.player.crossed(pipe):
                 player_crossed_pipe = True
@@ -85,7 +85,6 @@ class Flappy:
             self.score.add()
             reward = 1.0
 
-        # A lógica de desenho e atualização da tela só roda se não estivermos no modo headless
         if not self.headless:
             self.score.tick()
             pygame.display.update()
