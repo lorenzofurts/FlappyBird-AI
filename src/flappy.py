@@ -1,11 +1,4 @@
 import sys
-import os # Importamos a biblioteca 'os' para manipular variáveis de ambiente
-
-# --- A SOLUÇÃO DEFINITIVA ---
-# Esta linha DEVE ser executada ANTES de 'pygame.init()'
-# Ela diz à biblioteca SDL (usada pelo Pygame) para usar um driver de áudio 'dummy'
-os.environ['SDL_AUDIODRIVER'] = 'dummy'
-
 import pygame
 from pygame.locals import K_ESCAPE, KEYDOWN, QUIT
 
@@ -14,14 +7,7 @@ from .utils import GameConfig, Images, Sounds, Window
 
 class Flappy:
     def __init__(self, headless=True):
-        """
-        Inicializa o jogo.
-        headless=True: Roda sem tela, para treinamento rápido.
-        headless=False: Roda com tela, para visualização.
-        """
-        # Agora o pygame.init() vai rodar sem tentar encontrar uma placa de som.
         pygame.init()
-        
         pygame.display.set_caption("Flappy Bird AI")
         window = Window(288, 512)
 
@@ -39,10 +25,8 @@ class Flappy:
             fps=fps,
             window=window,
             images=images,
-            sounds=Sounds(),
+            sounds=Sounds(), # Agora isso cria a nossa classe de sons 'fantasma'
         )
-
-        self.config.sounds.mute()
         self.headless = headless
         self.reset()
 
