@@ -1,4 +1,11 @@
 import sys
+import os # Importamos a biblioteca 'os' para manipular variáveis de ambiente
+
+# --- A SOLUÇÃO DEFINITIVA ---
+# Esta linha DEVE ser executada ANTES de 'pygame.init()'
+# Ela diz à biblioteca SDL (usada pelo Pygame) para usar um driver de áudio 'dummy'
+os.environ['SDL_AUDIODRIVER'] = 'dummy'
+
 import pygame
 from pygame.locals import K_ESCAPE, KEYDOWN, QUIT
 
@@ -12,23 +19,19 @@ class Flappy:
         headless=True: Roda sem tela, para treinamento rápido.
         headless=False: Roda com tela, para visualização.
         """
+        # Agora o pygame.init() vai rodar sem tentar encontrar uma placa de som.
         pygame.init()
-        # SOLUÇÃO: Inicializa o mixer de som explicitamente para ambientes sem áudio.
-        pygame.mixer.init()
         
         pygame.display.set_caption("Flappy Bird AI")
         window = Window(288, 512)
 
-        # Inicializamos o display ANTES de carregar as imagens.
         screen = pygame.display.set_mode((window.width, window.height))
-
-        # Agora o carregamento de imagens funcionará.
         images = Images()
 
         if headless:
-            fps = 500  # Aumentamos o FPS para o treinamento
+            fps = 500
         else:
-            fps = 30 # FPS normal para visualização
+            fps = 30
 
         self.config = GameConfig(
             screen=screen,
